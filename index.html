@@ -69,11 +69,19 @@
       background-color: var(--button-hover);
     }
 
-    .success {
-      color: green;
-      font-size: 14px;
+    .success, .submitting {
       text-align: center;
       margin-top: 10px;
+    }
+
+    .success {
+      color: green;
+      font-size: 16px;
+    }
+
+    .submitting {
+      color: orange;
+      font-size: 14px;
     }
 
     .btn-group {
@@ -82,59 +90,100 @@
       gap: 10px;
       margin-top: 15px;
     }
+
+    #thankYouPage {
+      display: none;
+      text-align: center;
+    }
+
+    #thankYouPage a {
+      margin-top: 15px;
+      display: inline-block;
+      text-decoration: none;
+      color: var(--button-bg);
+    }
+
+    #thankYouPage a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="container" id="formContainer">
     <h1>Contact Us</h1>
 
     <form id="contactForm">
       <input type="text" id="name" placeholder="Enter your name" required />
       <input type="email" id="email" placeholder="Enter your email" required />
+      <input type="password" id="password" placeholder="Enter password (min 8 chars)" required />
       <input type="text" id="message" placeholder="Enter your message" required />
       <button type="submit">Submit</button>
     </form>
 
-    <div id="formMessage" class="success" style="display: none;">Thank you for your message!</div>
-
+    <div id="submittingMessage" class="submitting" style="display: none;">Submitting your information...</div>
     <div class="btn-group">
       <button id="toggleMessageBtn">Toggle Message</button>
       <button id="themeToggleBtn">Change Theme</button>
     </div>
   </div>
 
+  <div class="container" id="thankYouPage">
+    <h1>🎉 Submission Successful!</h1>
+    <p class="success">Your form was submitted successfully.</p>
+    <a href="#" onclick="restartForm()">Click here to submit another response</a>
+  </div>
+
   <script>
-    // Form submission with validation
     const form = document.getElementById('contactForm');
-    const formMessage = document.getElementById('formMessage');
+    const formMessage = document.getElementById('submittingMessage');
+    const formContainer = document.getElementById('formContainer');
+    const thankYouPage = document.getElementById('thankYouPage');
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
+
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
       const message = document.getElementById('message').value.trim();
 
-      if (!name || !email || !message) {
+      if (!name || !email || !password || !message) {
         alert('Please fill in all fields.');
         return;
       }
 
+      if (password.length < 8) {
+        alert('Password must be at least 8 characters long.');
+        return;
+      }
+
       formMessage.style.display = 'block';
-      form.reset();
+
+      // Simulate loading and then show success page
+      setTimeout(() => {
+        formMessage.style.display = 'none';
+        formContainer.style.display = 'none';
+        thankYouPage.style.display = 'block';
+      }, 2000);
     });
 
-    // Toggle success message
-    const toggleMessageBtn = document.getElementById('toggleMessageBtn');
-    toggleMessageBtn.addEventListener('click', () => {
+    // Toggle message visibility
+    document.getElementById('toggleMessageBtn').addEventListener('click', () => {
       formMessage.style.display = formMessage.style.display === 'none' ? 'block' : 'none';
     });
 
     // Toggle theme
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    themeToggleBtn.addEventListener('click', () => {
+    document.getElementById('themeToggleBtn').addEventListener('click', () => {
       document.body.classList.toggle('dark');
     });
+
+    // Restart form
+    function restartForm() {
+      thankYouPage.style.display = 'none';
+      formContainer.style.display = 'block';
+      form.reset();
+    }
   </script>
 </body>
 </html>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Interactive Webpage Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-color: #f4f7f6;
@@ -22,40 +23,60 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
+      padding: 0;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .container {
+      position: relative;
       background-color: var(--card-bg);
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      width: 350px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 360px;
+      margin: 40px auto;
       transition: background-color 0.3s ease;
+    }
+
+    #themeToggleBtn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+    }
+
+    #themeToggleBtn:hover {
+      background-color: rgba(0, 0, 0, 0.05);
     }
 
     h1 {
       text-align: center;
+      font-weight: 600;
+      margin-top: 10px;
     }
 
     form {
       display: flex;
       flex-direction: column;
       gap: 15px;
+      margin-top: 20px;
     }
 
     input, button {
-      padding: 10px;
-      border-radius: 5px;
+      padding: 10px 14px;
+      border-radius: 6px;
       border: 1px solid #ccc;
+      font-family: inherit;
     }
 
     button {
@@ -63,6 +84,7 @@
       color: white;
       cursor: pointer;
       border: none;
+      font-weight: 500;
     }
 
     button:hover {
@@ -84,13 +106,6 @@
       font-size: 14px;
     }
 
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
     #thankYouPage {
       display: none;
       text-align: center;
@@ -101,6 +116,7 @@
       display: inline-block;
       text-decoration: none;
       color: var(--button-bg);
+      font-weight: 500;
     }
 
     #thankYouPage a:hover {
@@ -110,7 +126,9 @@
 </head>
 <body>
 
+  <!-- Contact Form Container with Theme Toggle Inside -->
   <div class="container" id="formContainer">
+    <button id="themeToggleBtn" title="Toggle Theme">🌙</button>
     <h1>Contact Us</h1>
 
     <form id="contactForm">
@@ -122,12 +140,9 @@
     </form>
 
     <div id="submittingMessage" class="submitting" style="display: none;">Submitting your information...</div>
-    <div class="btn-group">
-      <button id="toggleMessageBtn">Toggle Message</button>
-      <button id="themeToggleBtn">Change Theme</button>
-    </div>
   </div>
 
+  <!-- Thank You Page -->
   <div class="container" id="thankYouPage">
     <h1>🎉 Submission Successful!</h1>
     <p class="success">Your form was submitted successfully.</p>
@@ -139,6 +154,7 @@
     const formMessage = document.getElementById('submittingMessage');
     const formContainer = document.getElementById('formContainer');
     const thankYouPage = document.getElementById('thankYouPage');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -160,7 +176,6 @@
 
       formMessage.style.display = 'block';
 
-      // Simulate loading and then show success page
       setTimeout(() => {
         formMessage.style.display = 'none';
         formContainer.style.display = 'none';
@@ -168,14 +183,10 @@
       }, 2000);
     });
 
-    // Toggle message visibility
-    document.getElementById('toggleMessageBtn').addEventListener('click', () => {
-      formMessage.style.display = formMessage.style.display === 'none' ? 'block' : 'none';
-    });
-
-    // Toggle theme
-    document.getElementById('themeToggleBtn').addEventListener('click', () => {
+    // Theme toggle
+    themeToggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
+      themeToggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
     });
 
     // Restart form
@@ -183,6 +194,7 @@
       thankYouPage.style.display = 'none';
       formContainer.style.display = 'block';
       form.reset();
+      formMessage.style.display = 'none';
     }
   </script>
 </body>
